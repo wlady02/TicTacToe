@@ -31,7 +31,7 @@ public class Game implements IGame{
     private final int COM8 = 0x3330;					// Combinacion 8 - diagonal de derecha a izquierda.
     
     private final int PLAYER1_VALUE = 1;
-    private final int PLAYER2_VALUE = 2;
+    private final int PLAYER2_VALUE = 2;				//CPU
     private final int MASK = 3;
 	
 	private int board;
@@ -42,7 +42,7 @@ public class Game implements IGame{
 		board = 0;
 		movements = 0;
 		player = Player.PLAYER1;
-		System.out.println("entro al const Game cliente");		
+		System.out.println("entro al constructor Game cliente");
 		try{
 		Socket s = new Socket(host, port);
         InputStream is = s.getInputStream();
@@ -52,8 +52,9 @@ public class Game implements IGame{
         dos.writeInt(iid);
         dos.writeInt(1);
         
-        if(dis.readBoolean()){        	
+        if(dis.readBoolean()){
         	//setBoard();
+        	System.out.println("recibida confirmacion de server, case 1");
         	s.close();
         }             
 		}
@@ -71,14 +72,18 @@ public class Game implements IGame{
 	}
 	
 	public Movement move(int cell) {
+		
 		try{
 			Socket s = new Socket(host, port);
-	        DataOutputStream canalSalida = new DataOutputStream(s.getOutputStream());
-	        DataInputStream canalEntrada = new DataInputStream(s.getInputStream());
-	        canalSalida.writeInt(2);
-	        canalSalida.writeInt(cell);//envio el indice cuando hago click
+			InputStream is = s.getInputStream();
+	        OutputStream os = s.getOutputStream();
+	        DataOutputStream dos = new DataOutputStream(os);
+	        DataInputStream dis = new DataInputStream(is);
+	        dos.writeInt(iid);
+	        dos.writeInt(2);
+	        dos.writeInt(cell);//envio el indice cuando hago click
 	        s.close();
-			}catch(Exception e){}
+			}catch(Exception e){e.printStackTrace();}
 		
 		if(!isValid(cell))
 			return Movement.NOT_ALLOWED;
@@ -98,7 +103,7 @@ public class Game implements IGame{
 		if(movements == NUMBER_OF_CELLLS)
 			return Movement.FINAL;
 
-		player = player == Player.PLAYER1 ? Player.PLAYER2 : Player.PLAYER1;
+		//player = player == Player.PLAYER1 ? Player.PLAYER2 : Player.PLAYER1; //se cambia el valor de player de player1 a player2
 		return Movement.ALLOWED;
 	}
 	
@@ -136,18 +141,13 @@ public class Game implements IGame{
 		return cells;
 	}
 
-	public static void setBoard(){
+	public void setBoard(){
 		Board board = new Board("Tablero");
 		board.setSize(300, 350);
 		board.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		board.setVisible(true);
 	}
 	
-	public static void runpartida(){
-		
-			setBoard();
-		
-	}
 	public int getMove() {
 		// TODO Auto-generated method stub
 		
@@ -160,6 +160,12 @@ public class Game implements IGame{
 		
 		//recibir conexion del sever
 		
+	}
+	public void setPlayer(String p){
+		
+	}
+	public Player getPlayer(Player p) {
+		return p.PLAYER1;
 	}
 	
 }

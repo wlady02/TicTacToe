@@ -5,12 +5,6 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -20,13 +14,12 @@ public class Board extends javax.swing.JFrame {
 	private JLabel label;
     private Cell[] cells;
     private Game game;
-    //static String host="localhost";
-	//static int port =9999;
-	int oid=-1;    
+    
 	public Board(String name){
 		super(name);
 		label = new JLabel();
 		cells = new Cell[Game.NUMBER_OF_CELLLS];
+		game = new Game();
 		initBoard();
 	}
 	public void initBoard(){

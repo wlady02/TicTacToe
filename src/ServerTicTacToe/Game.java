@@ -24,9 +24,8 @@ public class Game implements IGame{
 	}
 	
 	public void imprimirtabla(){
-		int i;
-		for(i=0;i<9;i++){
-			System.out.println(anArray[i]+"\t");
+		for(int i=0;i<9;i++){
+			System.out.println(anArray[i]+"  ");
 		}
 	}
 

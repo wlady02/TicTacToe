@@ -2,6 +2,7 @@ package ServerTicTacToe;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
@@ -18,7 +19,7 @@ public class Orb {// servidor ORB
 	int serverPort;
 	ISkeleton esqueleto;
 
-	class ServerTask implements Runnable {
+	/*class ServerTask implements Runnable {
 		Socket socket;
 
 		ServerTask(Socket sc) {
@@ -35,10 +36,10 @@ public class Orb {// servidor ORB
 				iid = canalEntrada.readInt();
 				esqueleto = getSkeleton(iid);
 				esqueleto.process(canalEntrada,canalSalida);
-			} catch (Exception e) {
+			} catch (Exception e) {e.printStackTrace();
 			}
 		}
-	}
+	}*/
 
 	Orb(int serverPort) {
 		this.serverPort = serverPort;
@@ -55,6 +56,26 @@ public class Orb {// servidor ORB
 	public void start() {
 		try {
 			ss = new ServerSocket(serverPort);
+		 while (true) {
+			 	sc = ss.accept();
+				InputStream is = sc.getInputStream();
+	            OutputStream os = sc.getOutputStream();
+	            canalEntrada = new DataInputStream(is);
+	            canalSalida = new DataOutputStream(os);
+
+	             iid = canalEntrada.readInt();
+
+	             esqueleto = getSkeleton(iid);
+	             esqueleto.process(canalEntrada, canalSalida);
+	             System.out.println("Fin");
+		 		}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		/*try {
+			ss = new ServerSocket(serverPort);
 			while (true) {
 				sc = ss.accept();
 				System.out.println("traza acepta la conexion");
@@ -63,8 +84,8 @@ public class Orb {// servidor ORB
 				th.start();
 				System.out.println("start thread");
 			}
-		} catch (Exception e) {
-		}		
+			} catch (Exception e) {
+			}*/		
 	}
 
 	public static void main(String[] args) {
